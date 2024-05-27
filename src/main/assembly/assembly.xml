@@ -1,0 +1,18 @@
+<assembly>
+  <id>release</id>
+  <formats>
+    <format>jar</format>
+  </formats>
+  <includeBaseDirectory>false</includeBaseDirectory>
+  <dependencySets>
+    <dependencySet>
+      <outputDirectory>/</outputDirectory>
+      <useProjectArtifact>true</useProjectArtifact>
+      <includes>
+        <include>org.gitlab4j:gitlab4j-api</include>
+        <include>by.eugenekulik:gitlab-helper</include>
+      </includes>
+      <unpack>true</unpack>
+    </dependencySet>
+  </dependencySets>
+</assembly>
