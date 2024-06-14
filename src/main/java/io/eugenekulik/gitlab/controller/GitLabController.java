@@ -1,8 +1,7 @@
-package by.eugenekulik.controller;
+package io.eugenekulik.gitlab.controller;
 
-import by.eugenekulik.service.GitLabService;
-import by.eugenekulik.view.Gui;
-
+import io.eugenekulik.gitlab.service.GitLabService;
+import io.eugenekulik.gitlab.view.Gui;
 import jakarta.annotation.PostConstruct;
 import java.util.*;
 import lombok.RequiredArgsConstructor;

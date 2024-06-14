@@ -1,4 +1,4 @@
-package by.eugenekulik.domain;
+package io.eugenekulik.gitlab.domain;
 
 import org.gitlab4j.api.models.MergeRequest;
 

@@ -1,6 +1,6 @@
-package by.eugenekulik.service;
+package io.eugenekulik.gitlab.service;
 
-import by.eugenekulik.dao.ConfigStorage;
+import io.eugenekulik.gitlab.dao.ConfigStorage;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;

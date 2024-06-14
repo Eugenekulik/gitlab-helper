@@ -1,7 +1,7 @@
-package by.eugenekulik.service;
+package io.eugenekulik.gitlab.service;
 
 
-import by.eugenekulik.domain.Notification;
+import io.eugenekulik.gitlab.domain.Notification;
 import java.util.Date;
 import java.util.Set;
 

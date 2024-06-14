@@ -1,4 +1,4 @@
-package by.eugenekulik.dao;
+package io.eugenekulik.gitlab.dao;
 
 import java.util.Map;
 import java.util.Optional;

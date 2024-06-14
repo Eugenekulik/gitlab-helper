@@ -1,7 +1,7 @@
-package by.eugenekulik.service;
+package io.eugenekulik.gitlab.service;
 
-import by.eugenekulik.domain.OpenMergeRequestNotification;
-import by.eugenekulik.domain.Notification;
+import io.eugenekulik.gitlab.domain.CloseMergeRequestNotification;
+import io.eugenekulik.gitlab.domain.Notification;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Set;
@@ -18,35 +18,32 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class OpenMergeRequestNotificationStrategy implements NotificationStrategy {
+public class CloseMergeRequestNotificationStrategy implements NotificationStrategy{
 
   private final GitLabApi gitLabApi;
-
 
   @Override
   public Set<Notification> getNotifications(Date after) {
     try {
-      return gitLabApi.getProjectApi().getMemberProjects().stream()
+      return gitLabApi.getProjectApi().getMemberProjectsStream()
           .flatMap(project -> {
             try {
-              return gitLabApi.getMergeRequestApi()
-                  .getMergeRequests(new MergeRequestFilter()
+              return gitLabApi.getMergeRequestApi().getMergeRequestsStream(
+                  new MergeRequestFilter()
                       .withProjectId(project.getId())
-                      .withState(MergeRequestState.OPENED)
-                      .withCreatedAfter(after)).stream();
+                      .withState(MergeRequestState.CLOSED)
+                      .withUpdatedAfter(after));
             } catch (GitLabApiException e) {
-              log.error("error occurred while getting merge requests for project: {}:{}",
-                  project.getId(),project.getName(), e);
+              log.error("Error occurred while getting merge requests for project: {}:{}",
+                  project.getId(), project.getName(), e);
             }
             return Stream.empty();
           })
-          .map(OpenMergeRequestNotification::new)
+          .map(CloseMergeRequestNotification::new)
           .collect(Collectors.toSet());
     } catch (GitLabApiException e) {
-      log.error("error occurred while getting members projects");
+      log.error("Error occurred while getting members projects", e);
     }
     return Collections.emptySet();
   }
 }
-
-

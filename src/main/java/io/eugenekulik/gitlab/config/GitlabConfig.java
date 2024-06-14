@@ -1,4 +1,4 @@
-package by.eugenekulik.config;
+package io.eugenekulik.gitlab.config;
 
 import org.gitlab4j.api.GitLabApi;
 import org.springframework.beans.factory.annotation.Value;

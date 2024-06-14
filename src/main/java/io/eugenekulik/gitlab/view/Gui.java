@@ -1,7 +1,7 @@
-package by.eugenekulik.view;
+package io.eugenekulik.gitlab.view;
 
-import by.eugenekulik.domain.Notification;
-import by.eugenekulik.service.NotificationConfiguration;
+import io.eugenekulik.gitlab.domain.Notification;
+import io.eugenekulik.gitlab.service.NotificationConfiguration;
 import java.awt.AWTException;
 import java.awt.CheckboxMenuItem;
 import java.awt.Image;

@@ -1,11 +1,10 @@
-package by.eugenekulik.service;
+package io.eugenekulik.gitlab.service;
 
-import by.eugenekulik.dao.ConfigStorage;
-import by.eugenekulik.domain.Notification;
+import io.eugenekulik.gitlab.dao.ConfigStorage;
+import io.eugenekulik.gitlab.domain.Notification;
 import java.util.Date;
 import java.util.Set;
 import java.util.stream.Collectors;
-import org.gitlab4j.api.GitLabApi;
 import org.springframework.stereotype.Service;
 
 
