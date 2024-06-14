@@ -2,3 +2,6 @@ gitlab:
   url: ${GITLAB_URL:https://git.yiilab.com/}
   token: ${GITLAB_TOKEN}
   refresh-period: ${GITLAB_REFRESH_PERIOD:5000}
+config:
+  file:
+    path: ${STORAGE_FILE:config.txt}

@@ -5,16 +5,15 @@ import io.eugenekulik.gitlab.view.Gui;
 import jakarta.annotation.PostConstruct;
 import java.util.*;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
+@Slf4j
 @RequiredArgsConstructor
 public class GitLabController {
 
-  private static final Logger log = LoggerFactory.getLogger(GitLabController.class);
   @Value("${gitlab.refresh-period}")
   private Integer refreshPeriod;
 

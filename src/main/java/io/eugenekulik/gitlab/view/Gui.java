@@ -2,6 +2,7 @@ package io.eugenekulik.gitlab.view;
 
 import io.eugenekulik.gitlab.domain.Notification;
 import io.eugenekulik.gitlab.service.NotificationConfiguration;
+import io.eugenekulik.gitlab.service.NotificationStrategy;
 import java.awt.AWTException;
 import java.awt.CheckboxMenuItem;
 import java.awt.Image;
@@ -11,6 +12,7 @@ import java.awt.PopupMenu;
 import java.awt.SystemTray;
 import java.awt.Toolkit;
 import java.awt.TrayIcon;
+import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +27,7 @@ public class Gui {
   public Gui(NotificationConfiguration notificationConfiguration) {
     this.notificationConfiguration = notificationConfiguration;
     try {
+      System.setProperty("java.awt.headless", "false");
       SystemTray tray = SystemTray.getSystemTray();
       Image image = Toolkit.getDefaultToolkit()
           .createImage(getClass().getResource("/logo.png"));
@@ -46,10 +49,14 @@ public class Gui {
   }
 
   private MenuItem createNotificationConfigMenu() {
+    Set<String> strategies = notificationConfiguration.getTypeNames();
     Menu menu = new Menu("Configure notifications");
-    CheckboxMenuItem openMergeRequesst = new CheckboxMenuItem("Open merge request");
-    CheckboxMenuItem closeMergeRequest = new CheckboxMenuItem("Close merge request");
-    CheckboxMenuItem notes = new CheckboxMenuItem("Notes");
+    CheckboxMenuItem openMergeRequesst = new CheckboxMenuItem("Open merge request",
+        strategies.contains("openMergeRequestNotificationStrategy"));
+    CheckboxMenuItem closeMergeRequest = new CheckboxMenuItem("Close merge request",
+        strategies.contains("closeMergeRequestNotificationStrategy"));
+    CheckboxMenuItem notes = new CheckboxMenuItem("Notes",
+        strategies.contains("noteNotificationStrategy"));
     openMergeRequesst.addItemListener(e-> notificationConfiguration
         .updateNotificationConfiguration("openMergeRequestNotificationStrategy", e.getStateChange() == 1));
     closeMergeRequest.addItemListener(e-> notificationConfiguration
