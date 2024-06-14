@@ -3,38 +3,39 @@ package by.eugenekulik.controller;
 import by.eugenekulik.service.GitLabService;
 import by.eugenekulik.view.Gui;
 
+import jakarta.annotation.PostConstruct;
 import java.util.*;
-import org.gitlab4j.api.GitLabApi;
+import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
+@Component
+@RequiredArgsConstructor
 public class GitLabController {
+
+  private static final Logger log = LoggerFactory.getLogger(GitLabController.class);
+  @Value("${gitlab.refresh-period}")
+  private Integer refreshPeriod;
 
 
   private final GitLabService service;
   private final Gui gui;
 
 
-  public GitLabController(GitLabService service, Gui gui) {
-    this.service = service;
-    this.gui = gui;
-    init();
-  }
-
-  public static GitLabController run() {
-    return new GitLabController(
-        new GitLabService(
-            new GitLabApi("https://git.yiilab.com/",
-                System.getenv("GITLAB_TOKEN"))),
-        new Gui());
-  }
-
+  @PostConstruct
   private void init() {
-    service.getNotifications();
     new Timer().schedule(new TimerTask() {
       @Override
       public void run() {
-        service.getNotifications().stream().forEach(gui::showNotification);
+        try {
+          service.getNotifications().stream().forEach(gui::showNotification);
+        } catch (Exception e) {
+          log.error("Error getting notifications", e);
+        }
       }
-    }, 1000, 5000);
+    }, 1000, refreshPeriod);
   }
 
 

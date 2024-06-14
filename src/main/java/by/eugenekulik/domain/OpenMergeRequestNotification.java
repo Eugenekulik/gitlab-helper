@@ -2,11 +2,11 @@ package by.eugenekulik.domain;
 
 import org.gitlab4j.api.models.MergeRequest;
 
-public class MergeRequestNotification implements Notification{
+public class OpenMergeRequestNotification implements Notification{
 
   private final MergeRequest mergeRequest;
 
-  public MergeRequestNotification(MergeRequest mergeRequest) {
+  public OpenMergeRequestNotification(MergeRequest mergeRequest) {
     this.mergeRequest = mergeRequest;
   }
 

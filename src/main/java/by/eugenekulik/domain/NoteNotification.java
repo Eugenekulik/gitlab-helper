@@ -14,10 +14,14 @@ public class NoteNotification implements Notification{
   public String toString() {
     return """
         New event!
-        author: %s,
+        noteable type: %s
+        type: %s
+        author: %s
         %s
         created at: %s
         """.formatted(
+            note.getNoteableType(),
+            note.getType(),
             note.getAuthor().getName(),
             note.getBody(),
             note.getCreatedAt()
