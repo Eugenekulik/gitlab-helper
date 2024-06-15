@@ -2,9 +2,9 @@ package io.eugenekulik.gitlab.view;
 
 import io.eugenekulik.gitlab.domain.Notification;
 import io.eugenekulik.gitlab.service.NotificationConfiguration;
-import io.eugenekulik.gitlab.service.NotificationStrategy;
 import java.awt.AWTException;
 import java.awt.CheckboxMenuItem;
+import java.awt.Desktop;
 import java.awt.Image;
 import java.awt.Menu;
 import java.awt.MenuItem;
@@ -12,8 +12,11 @@ import java.awt.PopupMenu;
 import java.awt.SystemTray;
 import java.awt.Toolkit;
 import java.awt.TrayIcon;
+import java.io.IOException;
+import java.net.URI;
 import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
+import org.gitlab4j.api.models.MergeRequest;
 import org.springframework.stereotype.Service;
 
 
@@ -23,6 +26,7 @@ public class Gui {
 
   private final NotificationConfiguration notificationConfiguration;
   private final TrayIcon trayIcon;
+  private final Menu mergeRequestMenu;
 
   public Gui(NotificationConfiguration notificationConfiguration) {
     this.notificationConfiguration = notificationConfiguration;
@@ -31,13 +35,14 @@ public class Gui {
       SystemTray tray = SystemTray.getSystemTray();
       Image image = Toolkit.getDefaultToolkit()
           .createImage(getClass().getResource("/logo.png"));
-
+      mergeRequestMenu = new Menu("Merge Requests");
       trayIcon = new TrayIcon(image, "Gitlab helper");
       trayIcon.setImageAutoSize(true);
       trayIcon.setToolTip("Gitlab helper");
       MenuItem exit = new MenuItem("Exit");
       exit.addActionListener(e -> System.exit(0));
       PopupMenu popup = new PopupMenu();
+      popup.add(mergeRequestMenu);
       popup.add(createNotificationConfigMenu());
       popup.addSeparator();
       popup.add(exit);
@@ -47,6 +52,27 @@ public class Gui {
       throw new RuntimeException(e);
     }
   }
+
+  public void updateMergeRequestMenu(Set<MergeRequest> openMR) {
+    openMR.stream().forEach(mergeRequest -> {
+      for(int i = 0; i < mergeRequestMenu.getItemCount(); i++) {
+        if (mergeRequestMenu.getItem(i).getName().equals(mergeRequest.getTitle())) {
+          return;
+        }
+      }
+      MenuItem menuItem = new MenuItem(mergeRequest.getTitle());
+      menuItem.addActionListener(event -> {
+        try {
+          Desktop.getDesktop().browse(URI.create(mergeRequest.getWebUrl()));
+        } catch (IOException e) {
+          log.error("Error while open merge request page", e);
+        }
+      });
+      mergeRequestMenu.add(menuItem);
+    });
+  }
+
+
 
   private MenuItem createNotificationConfigMenu() {
     Set<String> strategies = notificationConfiguration.getTypeNames();

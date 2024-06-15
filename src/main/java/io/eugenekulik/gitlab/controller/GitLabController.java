@@ -29,8 +29,9 @@ public class GitLabController {
       public void run() {
         try {
           service.getNotifications().stream().forEach(gui::showNotification);
+          gui.updateMergeRequestMenu(service.getOpenedMergeRequests());
         } catch (Exception e) {
-          log.error("Error getting notifications", e);
+          log.error("Error occurred in scheduler", e);
         }
       }
     }, 1000, refreshPeriod);
